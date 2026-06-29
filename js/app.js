@@ -96,7 +96,7 @@ function startApp(){
 
     showLoader();
 
-    initSpeech();
+  //  initSpeech();
 
     initHome();
 
