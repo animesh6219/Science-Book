@@ -94,7 +94,7 @@ function restoreState(){
 
 function startApp(){
 
-    showLoader();
+   // showLoader();
 
   //  initSpeech();
 
@@ -108,7 +108,7 @@ function startApp(){
 
         hideSplash();
 
-    },2000);
+    },200);
 }
 
 /* ==========================
