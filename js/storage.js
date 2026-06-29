@@ -1,5 +1,5 @@
 /* =================================
-   js/storage.js
+    js/storage.js
 ================================= */
 
 /*
@@ -13,7 +13,7 @@
 */
 
 /* ==========================
-   KEYS
+    KEYS
 ========================== */
 
 const STORAGE_KEYS = {
@@ -24,7 +24,7 @@ const STORAGE_KEYS = {
 };
 
 /* ==========================
-   GENERIC FUNCTIONS
+    GENERIC FUNCTIONS
 ========================== */
 
 function saveData(key, value){
@@ -78,7 +78,7 @@ function removeData(key){
 }
 
 /* ==========================
-   LAST OPENED LESSON
+    LAST OPENED LESSON
 ========================== */
 
 function saveLastLesson(
@@ -100,7 +100,7 @@ function getLastLesson(){
 }
 
 /* ==========================
-   LAST OPENED TOPIC
+    LAST OPENED TOPIC
 ========================== */
 
 function saveLastTopic(
@@ -122,7 +122,7 @@ function getLastTopic(){
 }
 
 /* ==========================
-   DARK MODE
+    DARK MODE
 ========================== */
 
 function saveDarkMode(
@@ -144,7 +144,7 @@ function getDarkMode(){
 }
 
 /* ==========================
-   LESSON PROGRESS
+    LESSON PROGRESS
 ========================== */
 
 /*
@@ -182,7 +182,7 @@ function saveProgressObject(
 }
 
 /* ==========================
-   SAVE PROGRESS
+    SAVE PROGRESS
 ========================== */
 
 function saveLessonProgress(
@@ -212,7 +212,7 @@ function saveLessonProgress(
 }
 
 /* ==========================
-   GET PROGRESS
+    GET PROGRESS
 ========================== */
 
 function getLessonProgress(
@@ -228,7 +228,34 @@ function getLessonProgress(
 }
 
 /* ==========================
-   RESET LESSON
+    CALCULATE PROGRESS PERCENTAGE
+========================== */
+
+function calculateProgress(
+    lessonIndex
+){
+
+    const topicCount =
+        getTopicCount(lessonIndex);
+
+    const completed =
+        getLessonProgress(lessonIndex);
+
+    if(topicCount === 0){
+        return 0;
+    }
+
+    if(completed === -1){
+        return 0;
+    }
+
+    return Math.round(
+        ((completed + 1) / topicCount) * 100
+    );
+}
+
+/* ==========================
+    RESET LESSON
 ========================== */
 
 function resetLessonProgress(
@@ -248,7 +275,7 @@ function resetLessonProgress(
 }
 
 /* ==========================
-   RESET EVERYTHING
+    RESET EVERYTHING
 ========================== */
 
 function clearAllAppData(){
@@ -271,7 +298,7 @@ function clearAllAppData(){
 }
 
 /* ==========================
-   CONTINUE READING
+    CONTINUE READING
 ========================== */
 
 function getContinueReading(){
@@ -287,7 +314,7 @@ function getContinueReading(){
 }
 
 /* ==========================
-   SAVE CURRENT POSITION
+    SAVE CURRENT POSITION
 ========================== */
 
 function saveCurrentPosition(
@@ -307,4 +334,38 @@ function saveCurrentPosition(
         lessonIndex,
         topicIndex
     );
+}
+
+/* ==========================
+    UPDATE CONTINUE CARD
+========================== */
+
+function updateContinueReadingCard(){
+
+    const data =
+        getContinueReading();
+
+    const lessonName =
+        lessons[data.lesson]?.name ||
+            "No lesson opened yet";
+
+    const continueLesson =
+        document.getElementById(
+            "continueLesson"
+        );
+
+    if(continueLesson){
+
+        continueLesson.textContent =
+            lessonName;
+    }
+}
+
+/* ==========================
+    UPDATE ALL LESSON CARDS
+========================== */
+
+function updateAllLessonCards(){
+
+    renderLessons();
 }
