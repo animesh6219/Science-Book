@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Lesson Reader</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f7fa;
+}
+
+/* Top Navigation */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:linear-gradient(135deg,#1565c0,#42a5f5);
+    color:#fff;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    box-shadow:0 2px 15px rgba(0,0,0,.2);
+}
+
+#tocBtn{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:#fff;
+    color:#1565c0;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.lesson-name{
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* TOC */
+
+.toc{
+    position:fixed;
+    left:-300px;
+    top:0;
+    width:280px;
+    height:100%;
+    background:#fff;
+    box-shadow:3px 0 20px rgba(0,0,0,.2);
+    transition:.3s;
+    z-index:2000;
+    overflow:auto;
+    padding:20px;
+}
+
+.toc.open{
+    left:0;
+}
+
+.toc h2{
+    color:#1565c0;
+    margin-bottom:20px;
+}
+
+.toc ul{
+    list-style:none;
+}
+
+.toc li{
+    padding:15px;
+    background:#f2f5ff;
+    border-radius:12px;
+    margin-bottom:12px;
+    cursor:pointer;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+#topicTitle{
+    color:#1565c0;
+    margin-bottom:20px;
+}
+
+#text{
+    font-size:30px;
+    line-height:2;
+}
+
+/* Word */
+
+.word{
+    display:inline-block;
+    position:relative;
+    padding:4px 6px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.word.active{
+    background:#2196f3;
+    color:#fff;
+}
+
+/* Beautiful Tooltip */
+
+.tooltip{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:55px;
+    min-width:120px;
+    background:linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+    color:#fff;
+    padding:10px 14px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    display:none;
+    font-size:15px;
+    z-index:999;
+}
+
+.tooltip::after{
+    content:"";
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    border:10px solid transparent;
+    border-top-color:#7c3aed;
+}
+
+.word.active .tooltip{
+    display:block;
+}
+
+/* Sentence Tooltip */
+
+#sentenceTooltip{
+    position:fixed;
+    left:50%;
+    bottom:30px;
+    transform:translateX(-50%);
+    background:linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+    color:#fff;
+    padding:12px 16px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    display:none;
+    max-width:90%;
+    text-align:center;
+    z-index:3000;
+}
+
+/* Topic Image */
+
+.topic-image{
+    width:100%;
+    margin-top:25px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <button id="tocBtn">☰</button>
+    <div class="lesson-name">
+        Lesson 1 : English Reader
+    </div>
+</header>
+
+<div id="toc" class="toc">
+    <h2>📚 Topics</h2>
+    <ul id="topicList"></ul>
+</div>
+
+<div class="container">
+
+    <h2 id="topicTitle"></h2>
+
+    <div id="text"></div>
+
+    <img
+        id="topicImage"
+        class="topic-image">
+
+</div>
+
+<div id="sentenceTooltip"></div>
+
+<script>
+
+const dictionary = {
+    hello:"नमस्ते",
+    world:"दुनिया",
+    this:"यह",
+    beautiful:"सुंदर",
+    school:"विद्यालय",
+    teaches:"सिखाता है",
+    science:"विज्ञान",
+    and:"और",
+    mathematics:"गणित",
+    every:"प्रत्येक",
+    student:"विद्यार्थी",
+    uses:"उपयोग करता है",
+    computer:"कंप्यूटर",
+    classroom:"कक्षा",
+    education:"शिक्षा",
+    makes:"बनाती है",
+    our:"हमारा",
+    future:"भविष्य",
+    bright:"उज्ज्वल"
+};
+
+const topics = [
+{
+    title:"Introduction",
+    sentence:
+    "Hello world this beautiful school teaches science and mathematics.",
+    meaning:
+    "यह सुंदर विद्यालय विज्ञान और गणित सिखाता है।",
+    image:
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7"
+},
+{
+    title:"Computers",
+    sentence:
+    "Every student uses computer in classroom.",
+    meaning:
+    "प्रत्येक विद्यार्थी कक्षा में कंप्यूटर का उपयोग करता है।",
+    image:
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
+},
+{
+    title:"Education",
+    sentence:
+    "Education makes our future bright.",
+    meaning:
+    "शिक्षा हमारा भविष्य उज्ज्वल बनाती है।",
+    image:
+    "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"
+}
+];
+
+let currentSentence="";
+let currentMeaning="";
+let words=[];
+let wordElements=[];
+
+const textDiv =
+document.getElementById("text");
+
+function showSentenceTooltip(text){
+
+    const t =
+        document.getElementById(
+            "sentenceTooltip"
+        );
+
+    t.textContent = text;
+    t.style.display = "block";
+
+    setTimeout(()=>{
+        t.style.display = "none";
+    },8000);
+}
+
+function speak(
+    text,
+    lang="hi-IN",
+    callback=null
+){
+    const u =
+        new SpeechSynthesisUtterance(text);
+
+    u.lang = lang;
+    u.rate = 0.9;
+
+    if(callback){
+        u.onend = callback;
+    }
+
+    speechSynthesis.speak(u);
+}
+
+function clearHighlight(){
+    wordElements.forEach(
+        w=>w.classList.remove(
+            "active"
+        )
+    );
+}
+
+function readSentence(){
+
+    speak(
+        "आइए अब पूरा sentence को पढ़ते हैं",
+        "hi-IN",
+        function(){
+
+            let i = 0;
+
+            function next(){
+
+                if(i < words.length){
+
+                    clearHighlight();
+
+                    wordElements[i]
+                    .classList.add(
+                        "active"
+                    );
+
+                    const word =
+                        words[i]
+                        .replace(
+                            /[.,!?]/g,
+                            ""
+                        );
+
+                    speak(
+                        word,
+                        "en-IN",
+                        function(){
+                            i++;
+                            next();
+                        }
+                    );
+
+                }else{
+
+                    clearHighlight();
+
+                    showSentenceTooltip(
+                        currentMeaning
+                    );
+
+                    speak(
+                        currentMeaning,
+                        "hi-IN"
+                    );
+                }
+            }
+
+            next();
+        }
+    );
+}
+
+function renderSentence(){
+
+    textDiv.innerHTML = "";
+    wordElements = [];
+
+    words =
+        currentSentence
+        .trim()
+        .split(/\s+/);
+
+    words.forEach(
+        (item,index)=>{
+
+        const clean =
+            item.toLowerCase()
+            .replace(
+                /[.,!?]/g,
+                ""
+            );
+
+        const span =
+            document.createElement(
+                "span"
+            );
+
+        span.className =
+            "word";
+
+        span.textContent =
+            item + " ";
+
+        wordElements.push(
+            span
+        );
+
+        const tooltip =
+            document.createElement(
+                "div"
+            );
+
+        tooltip.className =
+            "tooltip";
+
+        tooltip.textContent =
+            dictionary[clean]
+            ||
+            "अर्थ उपलब्ध नहीं है";
+
+        span.appendChild(
+            tooltip
+        );
+
+        span.onclick =
+        function(){
+
+            speechSynthesis.cancel();
+
+            clearHighlight();
+
+            document
+            .getElementById(
+                "sentenceTooltip"
+            )
+            .style.display =
+            "none";
+
+            this.classList.add(
+                "active"
+            );
+
+            if(
+                index ===
+                words.length - 1
+            ){
+
+                speak(
+                    clean,
+                    "en-IN",
+                    function(){
+
+                        setTimeout(
+                            readSentence,
+                            500
+                        );
+
+                    }
+                );
+
+            }else{
+
+                speak(
+                    clean,
+                    "en-IN"
+                );
+            }
+        };
+
+        textDiv.appendChild(
+            span
+        );
+    });
+}
+
+function loadTopic(i){
+
+    currentSentence =
+        topics[i].sentence;
+
+    currentMeaning =
+        topics[i].meaning;
+
+    document
+    .getElementById(
+        "topicTitle"
+    )
+    .innerText =
+        topics[i].title;
+
+    document
+    .getElementById(
+        "topicImage"
+    )
+    .src =
+        topics[i].image;
+
+    document
+    .getElementById(
+        "sentenceTooltip"
+    )
+    .style.display =
+        "none";
+
+    renderSentence();
+}
+
+const topicList =
+document.getElementById(
+    "topicList"
+);
+
+topics.forEach(
+(topic,index)=>{
+
+    const li =
+        document.createElement(
+            "li"
+        );
+
+    li.innerText =
+        topic.title;
+
+    li.onclick =
+        function(){
+
+            loadTopic(index);
+
+            document
+            .getElementById(
+                "toc"
+            )
+            .classList.remove(
+                "open"
+            );
+        };
+
+    topicList.appendChild(
+        li
+    );
+});
+
+document
+.getElementById(
+    "tocBtn"
+)
+.onclick =
+function(){
+
+    document
+    .getElementById(
+        "toc"
+    )
+    .classList.toggle(
+        "open"
+    );
+};
+
+loadTopic(0);
+
+</script>
+
+</body>
+</html>
