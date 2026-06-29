@@ -1,0 +1,391 @@
+/* =================================
+   lesson.css
+================================= */
+
+:root{
+    --primary:#2563eb;
+    --secondary:#7c3aed;
+    --surface:#ffffff;
+    --background:#f5f7fb;
+    --text:#1f2937;
+    --border:#e5e7eb;
+    --shadow:
+        0 10px 30px rgba(0,0,0,.08);
+    --radius:24px;
+}
+
+/* ============================
+   LESSON SCREEN
+============================ */
+
+#lessonScreen{
+    min-height:100vh;
+    background:var(--background);
+}
+
+/* ============================
+   TOP BAR
+============================ */
+
+.reader-header{
+    position:sticky;
+    top:0;
+    z-index:100;
+
+    height:70px;
+    padding:0 16px;
+
+    background:var(--surface);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:
+        0 2px 15px rgba(0,0,0,.06);
+}
+
+.reader-header h2{
+    flex:1;
+    text-align:center;
+    font-size:20px;
+    font-weight:700;
+    padding:0 10px;
+}
+
+.reader-header .icon-btn{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:#f3f4f6;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    cursor:pointer;
+}
+
+.reader-header .material-icons{
+    color:var(--primary);
+}
+
+/* ============================
+   PROGRESS BAR
+============================ */
+
+.lesson-progress{
+    height:8px;
+    background:#e5e7eb;
+}
+
+#lessonProgressBar{
+    width:0%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    transition:
+        width .4s ease;
+}
+
+/* ============================
+   READER CONTAINER
+============================ */
+
+.reader-container{
+    padding:25px;
+    padding-bottom:120px;
+}
+
+#topicTitle{
+    font-size:34px;
+    font-weight:700;
+    margin-bottom:25px;
+    color:var(--text);
+}
+
+/* ============================
+   TEXT AREA
+============================ */
+
+#textContainer{
+    font-size:28px;
+    line-height:2;
+    color:var(--text);
+}
+
+/* ============================
+   WORD STYLE
+============================ */
+
+.word{
+    display:inline-block;
+    margin-right:5px;
+    padding:4px 8px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.word:hover{
+    background:#e0e7ff;
+}
+
+.word.active{
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:white;
+}
+
+/* ============================
+   IMAGE
+============================ */
+
+#topicImage{
+    width:100%;
+    margin-top:30px;
+    border-radius:24px;
+    box-shadow:var(--shadow);
+}
+
+/* ============================
+   BOTTOM BUTTONS
+============================ */
+
+.reader-controls{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+
+    background:var(--surface);
+
+    display:flex;
+    gap:10px;
+
+    padding:15px;
+    box-shadow:
+        0 -5px 20px rgba(0,0,0,.08);
+}
+
+.reader-controls button{
+    flex:1;
+    border:none;
+    padding:15px;
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* ============================
+   TOOLTIP
+============================ */
+
+.tooltip{
+    position:fixed;
+    z-index:999;
+
+    background:#111827;
+    color:white;
+
+    padding:12px 18px;
+    border-radius:14px;
+
+    font-size:16px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.2);
+}
+
+/* ============================
+   SENTENCE TOOLTIP
+============================ */
+
+.sentence-tooltip{
+    position:fixed;
+    left:50%;
+    bottom:90px;
+
+    transform:
+        translateX(-50%);
+
+    background:#111827;
+    color:white;
+
+    width:90%;
+    max-width:500px;
+
+    padding:16px;
+    border-radius:18px;
+
+    text-align:center;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.2);
+
+    z-index:999;
+}
+
+/* ============================
+   SIDE PANEL
+============================ */
+
+#tocOverlay{
+    position:fixed;
+    inset:0;
+    background:
+        rgba(0,0,0,.4);
+
+    z-index:200;
+}
+
+#tocPanel{
+    position:fixed;
+    top:0;
+    left:-320px;
+
+    width:300px;
+    height:100vh;
+
+    background:white;
+
+    z-index:300;
+
+    transition:
+        left .3s ease;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.2);
+
+    overflow-y:auto;
+}
+
+#tocPanel.open{
+    left:0;
+}
+
+.toc-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px;
+    border-bottom:
+        1px solid var(--border);
+}
+
+#topicList{
+    list-style:none;
+    padding:15px;
+}
+
+#topicList li{
+    padding:16px;
+    margin-bottom:10px;
+
+    background:#f8fafc;
+    border-radius:16px;
+
+    cursor:pointer;
+    transition:.2s;
+}
+
+#topicList li:hover{
+    background:#e0e7ff;
+}
+
+#topicList li.active{
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:white;
+}
+
+/* ============================
+   LOADER
+============================ */
+
+#loader{
+    position:fixed;
+    inset:0;
+    background:
+        rgba(255,255,255,.7);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:9999;
+}
+
+.spinner{
+    width:60px;
+    height:60px;
+
+    border:6px solid #ddd;
+    border-top:
+        6px solid var(--primary);
+
+    border-radius:50%;
+
+    animation:
+        spin 1s linear infinite;
+}
+
+@keyframes spin{
+    from{
+        transform:rotate(0);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+
+@media(max-width:600px){
+
+    #topicTitle{
+        font-size:28px;
+    }
+
+    #textContainer{
+        font-size:23px;
+    }
+
+    .reader-controls button{
+        font-size:14px;
+        padding:13px;
+    }
+
+    #tocPanel{
+        width:270px;
+    }
+}
