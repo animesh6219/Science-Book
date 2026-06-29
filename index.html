@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Science Book</title>
+
+<!-- CSS Files -->
+<link rel="stylesheet" href="css/splash.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/lesson.css">
+<link rel="stylesheet" href="css/dark.css">
+
+<!-- Google Icons -->
+<link
+href="https://fonts.googleapis.com/icon?family=Material+Icons"
+rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ======================
+     SPLASH SCREEN
+====================== -->
+
+<section id="splashScreen">
+
+    <div class="logo-container">
+
+        <div class="logo-circle">
+            🔬
+        </div>
+
+        <h1 class="app-title">
+            Science Book
+        </h1>
+
+        <p class="tagline">
+            Learn Science with Voice
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ======================
+     HOME SCREEN
+====================== -->
+
+<section
+id="homeScreen"
+class="hidden">
+
+    <!-- Top Bar -->
+
+    <header class="home-header">
+
+        <div>
+
+            <h2>
+                Science
+            </h2>
+
+            <p>
+                Continue your learning
+            </p>
+
+        </div>
+
+        <button
+        id="themeBtn"
+        class="icon-btn">
+
+            <span class="material-icons">
+                dark_mode
+            </span>
+
+        </button>
+
+    </header>
+
+    <!-- Continue Reading Card -->
+
+    <div id="continueCard">
+
+        <h3>
+            Continue Reading
+        </h3>
+
+        <p id="continueLesson">
+
+            No lesson opened yet.
+
+        </p>
+
+        <button
+        id="continueBtn">
+
+            Open
+
+        </button>
+
+    </div>
+
+    <!-- Lesson Grid -->
+
+    <div
+    id="lessonGrid">
+
+    </div>
+
+</section>
+
+<!-- ======================
+     LESSON SCREEN
+====================== -->
+
+<section
+id="lessonScreen"
+class="hidden">
+
+    <!-- Top Bar -->
+
+    <header
+    class="reader-header">
+
+        <button
+        id="backBtn"
+        class="icon-btn">
+
+            <span
+            class="material-icons">
+                arrow_back
+            </span>
+
+        </button>
+
+        <h2
+        id="lessonTitle">
+
+        </h2>
+
+        <button
+        id="tocBtn"
+        class="icon-btn">
+
+            <span
+            class="material-icons">
+                menu
+            </span>
+
+        </button>
+
+    </header>
+
+    <!-- Topic Drawer Overlay -->
+
+    <div
+    id="tocOverlay"
+    class="hidden">
+
+    </div>
+
+    <!-- Side Drawer -->
+
+    <aside
+    id="tocPanel">
+
+        <div class="toc-header">
+
+            <h3>
+                Topics
+            </h3>
+
+            <button
+            id="closeTocBtn"
+            class="icon-btn">
+
+                <span
+                class="material-icons">
+                    close
+                </span>
+
+            </button>
+
+        </div>
+
+        <ul
+        id="topicList">
+
+        </ul>
+
+    </aside>
+
+    <!-- Progress -->
+
+    <div
+    class="lesson-progress">
+
+        <div
+        id="lessonProgressBar">
+
+        </div>
+
+    </div>
+
+    <!-- Topic Content -->
+
+    <main
+    class="reader-container">
+
+        <h1
+        id="topicTitle">
+
+        </h1>
+
+        <div
+        id="textContainer">
+
+        </div>
+
+        <img
+        id="topicImage"
+        class="hidden"
+        alt="Topic Image">
+
+    </main>
+
+    <!-- Bottom Controls -->
+
+    <div
+    class="reader-controls">
+
+        <button
+        id="prevTopicBtn">
+
+            Previous
+
+        </button>
+
+        <button
+        id="readBtn">
+
+            Read Lesson
+
+        </button>
+
+        <button
+        id="nextTopicBtn">
+
+            Next
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ======================
+     WORD TOOLTIP
+====================== -->
+
+<div
+id="wordTooltip"
+class="tooltip hidden">
+
+</div>
+
+<!-- ======================
+     SENTENCE TOOLTIP
+====================== -->
+
+<div
+id="sentenceTooltip"
+class="sentence-tooltip hidden">
+
+</div>
+
+<!-- ======================
+     LOADING INDICATOR
+====================== -->
+
+<div
+id="loader"
+class="hidden">
+
+    <div class="spinner"></div>
+
+</div>
+
+<!-- ======================
+     JAVASCRIPT FILES
+====================== -->
+
+<script src="data/dictionary.js"></script>
+<script src="data/lessons.js"></script>
+
+<script src="js/storage.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/speech.js"></script>
+<script src="js/reader.js"></script>
+<script src="js/home.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
