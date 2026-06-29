@@ -323,8 +323,8 @@ function initSpeech(){
         !speechSupported()
     ){
 
-        alert(
-            "Speech synthesis is not supported on this device."
+        console.warn(
+            "Speech synthesis is not supported on this device. Audio features disabled."
         );
 
         return;
