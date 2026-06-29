@@ -83,9 +83,12 @@ function hideSplash(){
 
 function restoreState(){
 
-    updateContinueReadingCard();
-
-    updateAllLessonCards();
+    try {
+        updateContinueReadingCard();
+        updateAllLessonCards();
+    } catch(e) {
+        console.error("Error restoring state:", e);
+    }
 }
 
 /* ==========================
@@ -94,21 +97,25 @@ function restoreState(){
 
 function startApp(){
 
-   // showLoader();
+    try {
+        // Initialize all modules
+        initHome();
+        restoreState();
 
-  //  initSpeech();
+        // Hide splash screen after initialization
+        setTimeout(()=>{
+            hideLoader();
+            hideSplash();
+        }, 500);
 
-    initHome();
-
-    restoreState();
-
-    setTimeout(()=>{
-
-        hideLoader();
-
-        hideSplash();
-
-    },200);
+    } catch(e) {
+        console.error("Application startup error:", e);
+        // Still hide splash even if there's an error
+        setTimeout(() => {
+            hideLoader();
+            hideSplash();
+        }, 500);
+    }
 }
 
 /* ==========================
@@ -137,6 +144,7 @@ document.addEventListener(
         */
 
         if(
+            typeof lessonScreen !== "undefined" &&
             !lessonScreen.classList
                 .contains(
                     "hidden"

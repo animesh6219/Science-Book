@@ -109,6 +109,8 @@ function showSentenceTooltip(
             "sentenceTooltip"
         );
 
+    if(!tooltip) return;
+
     tooltip.textContent =
         text;
 
@@ -139,6 +141,8 @@ function showWordTooltip(
         document.getElementById(
             "wordTooltip"
         );
+
+    if(!tooltip) return;
 
     tooltip.textContent =
         getMeaning(word);
@@ -179,6 +183,33 @@ function clearHighlights(){
             );
 
         });
+}
+
+/* ==========================
+   SPEAK WORD
+========================== */
+
+function speakWord(
+    element,
+    word
+){
+
+    speak(
+        word,
+        "en-IN"
+    );
+
+    if(element){
+        element.classList.add(
+            "active"
+        );
+
+        setTimeout(()=>{
+            element.classList.remove(
+                "active"
+            );
+        }, 1000);
+    }
 }
 
 /* ==========================
@@ -236,101 +267,30 @@ function readSentence(
         ){
             wordElements[index]
                 .classList
-                .add("active");
+                .add(
+                    "active"
+                );
         }
 
-        const word =
-            words[index]
-                .replace(
-                    /[.,!?]/g,
-                    ""
-                );
-
         speak(
-            word,
+            words[index],
             "en-IN",
-            function(){
-
-                index++;
-                readNext();
-
-            }
+            readNext
         );
+
+        index++;
     }
 
     readNext();
 }
 
 /* ==========================
-   SPEAK WORD
-========================== */
-
-function speakWord(
-    element,
-    word
-){
-
-    clearHighlights();
-
-    element.classList.add(
-        "active"
-    );
-
-    speak(
-        word,
-        "en-IN"
-    );
-}
-
-/* ==========================
-   AUTO READ CURRENT TOPIC
-========================== */
-
-function readCurrentTopic(){
-
-    if(
-        typeof currentSentence ===
-        "undefined"
-    ){
-        return;
-    }
-
-    readSentence(
-        currentSentence,
-        currentMeaning
-    );
-}
-
-/* ==========================
-   CHECK SUPPORT
-========================== */
-
-function speechSupported(){
-
-    return (
-        "speechSynthesis"
-        in window
-    );
-}
-
-/* ==========================
-   INIT
+   INIT SPEECH
 ========================== */
 
 function initSpeech(){
-
-    if(
-        !speechSupported()
-    ){
-
-        console.warn(
-            "Speech synthesis is not supported on this device. Audio features disabled."
-        );
-
-        return;
+    // Initialize speech synthesis if needed
+    if(!window.speechSynthesis){
+        console.warn("Speech Synthesis not supported");
     }
-
-    console.log(
-        "Speech engine ready."
-    );
 }
